@@ -21,8 +21,8 @@ def chunk_reader(fobj, chunk_size=1024):
         yield chunk
 
 
-def get_hash(filename, first_chunk_only=False, hash=hashlib.sha1):
-    hashobj = hash()
+def get_hash(filename, first_chunk_only=False, hash_algo=hashlib.sha1):
+    hashobj = hash_algo()
     with open(filename, "rb") as f:
         if first_chunk_only:
             hashobj.update(f.read(1024))
@@ -32,7 +32,7 @@ def get_hash(filename, first_chunk_only=False, hash=hashlib.sha1):
     return hashobj.digest()
 
 
-def check_for_duplicates(paths, hash=hashlib.sha1):
+def check_for_duplicates(paths):
     files_by_size = defaultdict(list)
     files_by_small_hash = defaultdict(list)
     files_by_full_hash = dict()
