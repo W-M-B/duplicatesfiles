@@ -5,6 +5,9 @@ Usage: duplicates.py <folder> [<folder>...]
 
 Based on https://stackoverflow.com/a/36113168/300783
 Modified for Python3 with some small code improvements.
+
+The script on stackoverflow has a bug which could lead to false positives. This is fixed
+here by using a tuple (file_size, hash) as key in the small hash comparison dictionary.
 """
 import os
 import sys
@@ -38,7 +41,7 @@ def check_for_duplicates(paths):
     files_by_full_hash = dict()
 
     for path in paths:
-        for dirpath, dirnames, filenames in os.walk(path):
+        for dirpath, _, filenames in os.walk(path):
             for filename in filenames:
                 full_path = os.path.join(dirpath, filename)
                 try:
@@ -52,7 +55,7 @@ def check_for_duplicates(paths):
                 files_by_size[file_size].append(full_path)
 
     # For all files with the same file size, get their hash on the first 1024 bytes
-    for files in files_by_size.values():
+    for file_size, files in files_by_size.items():
         if len(files) < 2:
             continue  # this file size is unique, no need to spend cpu cycles on it
 
@@ -62,7 +65,7 @@ def check_for_duplicates(paths):
             except OSError:
                 # the file access might've changed till the exec point got here
                 continue
-            files_by_small_hash[small_hash].append(filename)
+            files_by_small_hash[(file_size, small_hash)].append(filename)
 
     # For all files with the hash on the first 1024 bytes, get their hash on the full
     # file - collisions will be duplicates
