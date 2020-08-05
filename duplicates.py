@@ -5,9 +5,6 @@ Usage: duplicates.py <folder> [<folder>...]
 
 Based on https://stackoverflow.com/a/36113168/300783
 Modified for Python3 with some small code improvements.
-
-The script on stackoverflow has a bug which could lead to false positives. This is fixed
-here by using a tuple (file_size, hash) as key in the small hash comparison dictionary.
 """
 import os
 import sys
