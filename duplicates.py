@@ -12,6 +12,7 @@ updated original script to contain:
 4. output folder 
 5. option to rename duplicates to delete them afterwards.
 Fast duplicate file finder with logging, timestamped CSV output, and optional duplicate renaming.
+6 parameter chunk-size is experimental 
 
 Usage:
     duplicates.py <folder> [<folder> ...]
